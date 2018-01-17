@@ -19,3 +19,4 @@ This version of Camagru includes :
 * Share buttons
 * Infinite image scrolling
 * Image preview
+* Liked image list

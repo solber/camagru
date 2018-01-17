@@ -26,6 +26,9 @@ if (session_status() == PHP_SESSION_NONE) { session_start(); }
             </li>
             <?php if(isset($_SESSION['auth'])): ?>
               <li>
+                <a href="like_list.php">Liked</a>
+              </li>
+              <li>
                 <a href="add_cam.php">Add</a>
               </li>
               <li>
