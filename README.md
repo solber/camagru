@@ -2,7 +2,7 @@
 Camagru is a 42 Project where the goal is to create a simple version of Instragram, using HTML,CSS,PHP.
 This version of Camagru includes :
 * Possibility to use Webcam to take photos
-* Upload file instead of Webcame
+* Upload file instead of Webcam
 * Add filter on image
 	* Frame
 	* Moon
@@ -12,7 +12,7 @@ This version of Camagru includes :
 	* Change email
 	* Change password
 	* Enable/Disable email notifications
-* Like
+* Likes
 * Comments
 ### BONUS PART
 * Some ajax to fluidify the thing
