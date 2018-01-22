@@ -1,11 +1,4 @@
-<?php require_once 'required/header.php'; 
-
-	if (!isset($_SESSION['auth'])) 
-	{
-		$_SESSION['flash']['danger'] = "You cannot acces this page.";
-		header('Location: index.php');
-		exit();
-	}
+<?php require 'required/header.php'; require 'required/functions.php'; iNotConnected();
 
 	$uploadfile = "";
 	if (!empty($_POST))

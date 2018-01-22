@@ -1,11 +1,4 @@
-<?php 
-	require_once "required/header.php"; 
-	if (isset($_SESSION['id']))
-	{
-		$_SESSION['flash']['danger'] = "You cannot acces this page.";
-		header('Location: index.php');
-		exit();
-	}
+<?php require 'required/header.php'; require 'required/functions.php'; iConnected();
 
 	if (!empty($_POST))
 	{
@@ -73,7 +66,7 @@
 
            	$user_id = $pdo->lastinsertid();
 
-           	send_mail($_POST['email'], "Account confirmation", "Hi, please click on this link to validate your account : \n\nhttp://localhost/camagru/confirm.php?id=$user_id&token=$token");
+           	send_mail($_POST['email'], "Account confirmation", "Hi, please click on this link to validate your account : \n\nhttp://localhost/confirm.php?id=$user_id&token=$token");
 
            	mkdir('img/user/' .$user_id, 0777);
            	$_SESSION['flash']['success'] = "SUCCESS - Confirmation email has been sent !";

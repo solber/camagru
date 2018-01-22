@@ -1,16 +1,4 @@
-<?php 
-	if (session_status() == PHP_SESSION_NONE) { session_start(); }
-	if (!isset($_SESSION['auth'])) 
-	{
-		$_SESSION['flash']['danger'] = "You cannot acces this page.";
-		header('Location: index.php');
-		exit();
-	}
-
-
-
-?>
-<?php require_once "required/header.php"; ?>
+<?php require 'required/header.php'; require 'required/functions.php'; iNotConnected(); ?>
     <div class="content">
     	<div class="container">
     		<?php
@@ -28,7 +16,7 @@
     					$req->execute([$img->owner_id]);
     					$name = $req->fetch();
 
-    					echo '<center><p>You liked image of : '.$name->username .' <img src="http://localhost/camagru/' .$img->img_path .'" width="5%" style="position: relative; top: 20px"></p></center>';
+    					echo '<center><p>You liked image of : '.$name->username .' <img src="' .$img->img_path .'" width="5%" style="position: relative; top: 20px"></p></center>';
     				}
     			}
 

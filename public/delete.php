@@ -1,11 +1,4 @@
-<?php
-	if (session_status() == PHP_SESSION_NONE) { session_start(); }
-	if (!isset($_SESSION['auth'])) 
-	{
-		$_SESSION['flash']['danger'] = "You cannot acces this page.";
-		header('Location: index.php');
-		exit();
-	}
+<?php require 'required/header.php'; require 'required/functions.php'; iNotConnected();
 	require_once 'required/database.php';
 
 	$img_id = $_GET['img_id'];
