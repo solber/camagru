@@ -1,6 +1,8 @@
 <?php require 'required/header.php'; require 'required/functions.php'; iNotConnected();
 	require_once 'required/database.php';
 
+	if (!isset($_GET) || !isset($_GET['img_id']))
+		put_flash('danger', "Invalid ID", "/index.php");
 	$img_id = $_GET['img_id'];
 
 	if(!is_numeric($img_id))
