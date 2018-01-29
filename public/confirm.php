@@ -1,5 +1,8 @@
 <?php require 'required/header.php'; require 'required/functions.php'; iConnected();
 
+if (!isset($_GET) || !isset($_GET['id']) || !isset($_GET['token']))
+	put_flash('danger', "Invalid", "/index.php");
+
 $user_id = $_GET['id'];
 $token = $_GET['token'];
 
