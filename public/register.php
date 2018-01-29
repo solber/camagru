@@ -33,7 +33,9 @@
 		//Verify user
 		require_once 'required/database.php';
         $req = $pdo->prepare('SELECT id FROM users WHERE username = ?');
-        $req->execute([$_POST['username']]);
+        
+        if (!$req->execute([$_POST['username']]))
+          put_flash('danger', "Error while querying the DB.", "/index.php");
         $user = $req->fetch();
         if($user)
         {
@@ -45,7 +47,9 @@
         //Verify mail
         require_once 'required/database.php';
         $req = $pdo->prepare('SELECT id FROM users WHERE mail = ?');
-        $req->execute([$_POST['email']]);
+      
+        if (!$req->execute([$_POST['email']]))
+          put_flash('danger', "Error while querying the DB.", "/index.php");
         $user = $req->fetch();
         if($user)
         {
@@ -56,13 +60,14 @@
 
         //register user
         require_once 'required/database.php';
-        require_once 'required/functions.php';
         try
         {
 	        $req = $pdo->prepare("INSERT INTO users SET username = ?, password = ?, mail = ?, token = ?");
             $password = password_hash($_POST['password'], PASSWORD_BCRYPT);
             $token = str_random(60);
-           	$req->execute([$_POST['username'], $password, $_POST['email'], $token]);
+           	
+            if (!$req->execute([$_POST['username'], $password, $_POST['email'], $token]))
+              put_flash('danger', "Error while querying the DB.", "/index.php");
 
            	$user_id = $pdo->lastinsertid();
 

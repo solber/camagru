@@ -7,28 +7,25 @@
 		{
 			//verif format username field
 			if (!preg_match('/^[a-zA-Z0-9]+$/', $_POST['username']))
-			{ 
-				$_SESSION['flash']['danger'] = "Invalid username. Allowed char : a-z A-Z 0-9";
-				header('Location: account.php');
-				exit();
-			}
+				put_flash('danger', "Invalid username. Allowed char : a-z A-Z 0-9", "/account.php");
 
 			//empty username
 			if (empty($_POST['username']))
-			{
-				$_SESSION['flash']['danger'] = "Fill username field.";
-				header('Location: account.php');
-				exit();
-			}
+				put_flash('danger', "Fill username field.", "account.php");
 
 			//changing username
 			require_once 'required/database.php';
 			$req = $pdo->prepare('UPDATE users SET username = ? WHERE id = ?');
-			$req->execute([$_POST['username'], $_SESSION['auth']->id]);
-			$_SESSION['auth']->username = $_POST['username'];
-			$_SESSION['flash']['success'] = "Username changed !";
-			header('Location: account.php');
-			exit();
+
+			if ($req->execute([$_POST['username'], $_SESSION['auth']->id]))
+			{
+				$_SESSION['auth']->username = $_POST['username'];
+				put_flash('success', "Username changed !", "/account.php");
+			}
+			else
+			{
+				put_flash('danger', "Error while querying the DB.", "/account.php");
+			}
 		}
 
 		//changing email
@@ -36,21 +33,21 @@
 		{
 			//empty mail
 			if (empty($_POST['change_email']))
-			{
-				$_SESSION['flash']['danger'] = "Fill email field.";
-				header('Location: account.php');
-				exit();
-			}
+				put_flash('danger', "Fill email field.", "/account.php");
 
 			//changing mail
 			require_once 'required/database.php';
 			$req = $pdo->prepare('UPDATE users SET mail = ? WHERE id = ?');
-			$req->execute([$_POST['mail'], $_SESSION['auth']->id]);
-			$_SESSION['auth']->mail = $_POST['mail'];
-			$_SESSION['flash']['success'] = "Mail changed !";
-			header('Location: account.php');
-			exit();
-
+			
+			if ($req->execute([$_POST['mail'], $_SESSION['auth']->id]))
+			{
+				$_SESSION['auth']->mail = $_POST['mail'];
+				put_flash('success', "Mail has been changed !", "/account.php");
+			}
+			else
+			{
+				put_flash('danger', "Error while querying the DB.", "/account.php");
+			}
 		}
 
 		//changing password
@@ -58,37 +55,30 @@
 		{
 			//empty psw
 			if (empty($_POST['password']) || empty($_POST['password-repeat']))
-			{
-				$_SESSION['flash']['danger'] = "Fill all fields.";
-				header('Location: account.php');
-				exit();
-			}
+				put_flash('danger', "Fill all fields.", "/account.php");
 
 			//matching chqr
 			if (!preg_match('/^[a-zA-Z0-9]+$/', $_POST['password']) || !preg_match('/^[a-zA-Z0-9]+$/', $_POST['password-repeat']))
-			{ 
-				$_SESSION['flash']['danger'] = "Invalid password. Allowed char : a-z A-Z 0-9";
-				header('Location: account.php');
-				exit();
-			}
+				put_flash('danger', "Invalid password. Allowed char : a-z A-Z 0-9", "/account.php");
 
 			//matching siwe
 			if (strlen($_POST['password']) < 6 || strlen($_POST['password']) > 10)
-			{
-				$_SESSION['flash']['danger'] = "Invalid password size. Minimum 6 Maximum 10.";
-				header('Location: account.php');
-				exit();
-			}
+				put_flash('danger', "Invalid password size. Minimum 6 Maximum 10.", "/account.php");
 
 			//changing password
 			require_once 'required/database.php';
 			$req = $pdo->prepare('UPDATE users SET password = ? WHERE id = ?');
 			$password = password_hash($_POST['password'], PASSWORD_BCRYPT);
-			$req->execute([$password, $_SESSION['auth']->id]);
-			$_SESSION['auth']->password = $password;
-			$_SESSION['flash']['success'] = "Password changed !";
-			header('Location: account.php');
-			exit();
+			
+			if ($req->execute([$password, $_SESSION['auth']->id]))
+			{
+				$_SESSION['auth']->password = $password;
+				put_flash('success', "Password has been changed !", "/account.php");
+			}
+			else
+			{
+				put_flash('danger', "Error while querying the DB.", "/account.php");
+			}
 		}
 
 		if (!empty($_POST['mailable']))
@@ -97,20 +87,30 @@
 			if ($_POST['mailable'] === "Turn ON mail")
 			{
 				$req = $pdo->prepare('UPDATE users SET mailable = 1 WHERE id = ?');
-				$req->execute([$_SESSION['auth']->id]);
-				$_SESSION['auth']->mailable = 1;
-				$_SESSION['flash']['success'] = "mail ON !";
-				header('Location: account.php');
-				exit();
+				
+				if ($req->execute([$_SESSION['auth']->id]))
+				{
+					$_SESSION['auth']->mailable = 1;
+					put_flash('success', "Mail notifications turned ON", "/account.php");
+				}
+				else
+				{
+					put_flash('danger', "Error while querying the DB.", "/account.php");
+				}
 			}
 			else if ($_POST['mailable'] === "Turn OFF mail")
 			{
 				$req = $pdo->prepare('UPDATE users SET mailable = 0 WHERE id = ?');
-				$req->execute([$_SESSION['auth']->id]);
-				$_SESSION['auth']->mailable = 0;
-				$_SESSION['flash']['success'] = "mail OFF !";
-				header('Location: account.php');
-				exit();
+				
+				if ($req->execute([$_SESSION['auth']->id]))
+				{
+					$_SESSION['auth']->mailable = 0;
+					put_flash('success', "Mail notifications turned OFF", "/account.php");
+				}
+				else
+				{
+					put_flash('danger', "Error while querying the DB.", "/account.php");
+				}
 			}
 		}
 	}

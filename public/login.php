@@ -20,7 +20,9 @@
 
 	     require_once 'required/database.php';
         $req = $pdo->prepare("SELECT * FROM users WHERE username = :username AND verified = 'Y'");
-        $req->execute(['username' => $_POST['username']]);
+        
+        if (!$req->execute(['username' => $_POST['username']]))
+        	put_flash('danger', "Error while querying the DB.", "/index.php");
         $user = $req->fetch();
 
         if(password_verify($_POST['password'], $user->password)){

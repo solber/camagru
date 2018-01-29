@@ -4,23 +4,26 @@
 	$img_id = $_GET['img_id'];
 
 	if(!is_numeric($img_id))
-	{
-		$_SESSION['flash']['danger'] = "Invalid ID.";
-		header('Location: index.php');
-		exit();
-	}
+		put_flash('danger', "Invalid ID", "/index.php");
 
-	$req = $pdo->query('SELECT * FROM images WHERE id = ' .intval($img_id));
-	$info = $req->fetch();
+	if ($req = $pdo->query('SELECT * FROM images WHERE id = ' .intval($img_id)))
+	{
+		$info = $req->fetch();
+	}
+	else
+	{
+		put_flash('danger', "Error while querying the DB.", "/index.php");
+	}
 
 	$res = split('/', $info->img_path)[3];
 	unlink('img/user/' .$_SESSION['auth']->id .'/' .$res);
 
-	$pdo->query('DELETE FROM images WHERE id = ' .intval($img_id));
-	$pdo->query('DELETE FROM likes WHERE img_id = ' .intval($img_id));
-	$pdo->query('DELETE FROM comments WHERE img_id = ' .intval($img_id));
+	if (!$pdo->query('DELETE FROM images WHERE id = ' .intval($img_id)))
+		put_flash('danger', "Error while querying the DB.", "/index.php");
+	if (!$pdo->query('DELETE FROM likes WHERE img_id = ' .intval($img_id)))
+		put_flash('danger', "Error while querying the DB.", "/index.php");
+	if (!$pdo->query('DELETE FROM comments WHERE img_id = ' .intval($img_id)))
+		put_flash('danger', "Error while querying the DB.", "/index.php");
 	
-	$_SESSION['flash']['info'] = "Image deleted";
-	header('Location: index.php');
-	exit();
+	put_flash('info', "Image deleted successfully.", "/index.php");
 ?>

@@ -29,6 +29,7 @@
 		ImagePNG($back, USER_DIR .$timezone .'.png'); 
 		require_once 'required/database.php';
 
-		$pdo->query('INSERT INTO images SET img_path = "' .USER_DIR .$timezone . '.png' .'", owner_id = ' .$_SESSION['auth']->id);
+		if (!$pdo->query('INSERT INTO images SET img_path = "' .USER_DIR .$timezone . '.png' .'", owner_id = ' .$_SESSION['auth']->id))
+			put_flash('danger', "Error while querying the DB.", "/index.php");
 	}
 ?>

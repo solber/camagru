@@ -24,9 +24,6 @@ use camagru;
 
 -- --------------------------------------------------------
 
---
--- Structure de la table `comments`
---
 DROP TABLE IF EXISTS `comments`;
 CREATE TABLE IF NOT EXISTS `comments` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -35,7 +32,14 @@ CREATE TABLE IF NOT EXISTS `comments` (
   `comment_text` varchar(255) NOT NULL,
   `posted_date` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=18 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=22 DEFAULT CHARSET=utf8;
+
+--
+-- Déchargement des données de la table `comments`
+--
+
+INSERT INTO `comments` (`id`, `img_id`, `owner_comment`, `comment_text`, `posted_date`) VALUES
+(21, 96, 6, 'Meoow', '2018-01-28 23:36:12');
 
 -- --------------------------------------------------------
 
@@ -50,7 +54,15 @@ CREATE TABLE IF NOT EXISTS `images` (
   `owner_id` int(11) NOT NULL,
   `posted_date` datetime DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=87 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=97 DEFAULT CHARSET=utf8;
+
+--
+-- Déchargement des données de la table `images`
+--
+
+INSERT INTO `images` (`id`, `img_path`, `owner_id`, `posted_date`) VALUES
+(95, 'img/user/6/1517178919UhchPPTcas.png', 6, '2018-01-28 23:35:19'),
+(96, 'img/user/6/1517178959CiGesgRet4.png', 6, '2018-01-28 23:36:00');
 
 -- --------------------------------------------------------
 
@@ -64,7 +76,15 @@ CREATE TABLE IF NOT EXISTS `likes` (
   `img_id` int(11) NOT NULL,
   `owner_like_id` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=30 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=35 DEFAULT CHARSET=utf8;
+
+--
+-- Déchargement des données de la table `likes`
+--
+
+INSERT INTO `likes` (`id`, `img_id`, `owner_like_id`) VALUES
+(33, 95, 6),
+(34, 96, 7);
 
 -- --------------------------------------------------------
 
@@ -82,7 +102,15 @@ CREATE TABLE IF NOT EXISTS `users` (
   `verified` varchar(1) NOT NULL DEFAULT 'N',
   `mailable` tinyint(1) NOT NULL DEFAULT '1',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
+
+--
+-- Déchargement des données de la table `users`
+--
+
+INSERT INTO `users` (`id`, `username`, `mail`, `password`, `token`, `verified`, `mailable`) VALUES
+(6, 'solber', 'solber@hotmail.fr', '$2y$10$mGLV8ninO.JQOVOD4rrHke1OGhrobQ0OqPFdKWEWILqKEd.7uELWC', '1eKYEfbZR5mWEQzOG0kFfWowcPqPHfm089UretBNLty4V5aOUX29HHS5EAWw', 'Y', 0),
+(7, 'solber2', 'solber@hotmail.fr', '$2y$10$mGLV8ninO.JQOVOD4rrHke1OGhrobQ0OqPFdKWEWILqKEd.7uELWC', '1eKYEfbZR5mWEQzOG0kFfWowcPqPHfm089UretBNLty4V5aOUX29HHS5EAWw', 'Y', 0);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

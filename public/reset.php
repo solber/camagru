@@ -10,10 +10,13 @@
 
 		    $rnd = str_random(10);
 		    $password = password_hash($rnd, PASSWORD_BCRYPT);
-		    $req->execute([$password, $_POST['username']]);
+		    if (!$req->execute([$password, $_POST['username']]))
+		    	put_flash('danger', "Error while querying the DB.", "/index.php");
 
 		    $req = $pdo->prepare("SELECT * FROM users WHERE username = :username AND verified = 'Y'");
-        	$req->execute(['username' => $_POST['username']]);
+        	
+        	if (!$req->execute(['username' => $_POST['username']]))
+        		put_flash('danger', "Error while querying the DB.", "/index.php");
         	$user = $req->fetch();
 
         	if($user){

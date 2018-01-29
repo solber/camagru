@@ -1,4 +1,5 @@
 <?php require_once "required/header.php"; ?>
+<?php require_once "required/functions.php"; ?>
 <div id="fb-root"></div>
 <script>(function(d, s, id) {
   var js, fjs = d.getElementsByTagName(s)[0];
@@ -15,8 +16,14 @@
             foreach($pdo->query('SELECT * FROM images ORDER BY posted_date DESC') as $row)
             {
                 $req = $pdo->prepare("SELECT * FROM users WHERE id = :id");
-                $req->execute(['id' => $row->owner_id]);
-                $username = $req->fetch();
+                if ($req->execute(['id' => $row->owner_id]))
+                {
+                    $username = $req->fetch();
+                }
+                else
+                {
+                    put_flash('danger', "Error while querying the DB.", "/index.php");
+                }
 
                 $nblike = 0;
                 $liked_by_me = false;
@@ -60,8 +67,14 @@
                     <?php 
                         foreach ($pdo->query("SELECT * FROM comments WHERE img_id = $row->id ORDER BY posted_date DESC") as $comment) { 
                             $req = $pdo->prepare("SELECT * FROM users WHERE id = :id");
-                            $req->execute(['id' => $comment->owner_comment]);
-                            $username = $req->fetch();
+                            if ($req->execute(['id' => $comment->owner_comment]))
+                            {
+                                $username = $req->fetch();
+                            }
+                            else
+                            {
+                                put_flash('danger', "Error while querying the DB.", "/index.php");
+                            }
 
                     ?>
                         <span class="comment-line"><p><label class="auteur"><?php echo htmlspecialchars($username->username); ?></label>: <label><?php echo htmlspecialchars(utf8_encode($comment->comment_text)); ?></label></p></span>

@@ -8,5 +8,5 @@
 	if (isset($_SESSION['auth']))
 		unset($_SESSION['auth']);
 	$_SESSION['flash']['success'] = "Database set.";
-	header('Location: ../index.php');
+	header('Location: /index.php');
 ?>

@@ -28,8 +28,6 @@
 			exit();
 		}
 
-		require_once 'required/functions.php';
-
 		$uploaddir = 'img/tmp/' .$_SESSION['auth']->id;
 
 		if (!is_dir($uploaddir))

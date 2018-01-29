@@ -4,9 +4,7 @@
 
 	if (empty($_POST['img_id']) || empty($_POST['comment']) || !is_numeric($_POST['img_id']))
 	{
-		$_SESSION['flash']['danger'] = "Invalid informations.";
-		header('Location: index.php');
-		exit();
+		put_flash('danger', "Invalid informations.", "/index.php");
 	}
 	else
 	{
@@ -14,38 +12,49 @@
 		$img_id = intval($_POST['img_id']);
 
 		require_once 'required/database.php';
-		 require_once 'required/functions.php';
 
 		$req = $pdo->prepare('INSERT INTO comments SET img_id = ?, owner_comment = ?, comment_text = ?');
-		$req->execute([$img_id, $_SESSION['auth']->id, $comment]);
+		
+		if (!$req->execute([$img_id, $_SESSION['auth']->id, $comment]))
+			put_flash('danger', "Error while querying the DB.", "/index.php");
 
 		$req = $pdo->prepare('SELECT owner_id FROM images WHERE id = ?');
-		$req->execute([$img_id]);
-		$userid = $req->fetch();
+		
+		if ($req->execute([$img_id]))
+		{
+			$userid = $req->fetch();
+		}
+		else
+		{
+			put_flash('danger', "Error while querying the DB.", "/index.php");
+		}
 		if ($userid)
 		{
 			$req = $pdo->prepare('SELECT mail, mailable FROM users WHERE id = ?');
-			$req->execute([$userid->owner_id]);
-			$mailto = $req->fetch();
+			
+			if ($req->execute([$userid->owner_id]))
+			{
+				$mailto = $req->fetch();
+			}
+			else
+			{
+				put_flash('danger', "Error while querying the DB.", "/index.php");
+			}
 			if ($mailto)
 			{
 				if ($mailto->mailable)
 					send_mail($mailto->mail, "New comment", "Hi, you receive a new comment !\n Comment : $comment");
-				header('Location: index.php');
+				header('Location: /index.php');
 				exit();
 			}
 			else
 			{
-				$_SESSION['flash']['danger'] = "User does not exists anymore.";
-				header('Location: index.php');
-				exit();
+				put_flash('User does not exists anymore.', "/index.php");
 			}
 		}
 		else
 		{
-			$_SESSION['flash']['danger'] = "Error while sending mail to user.";
-			header('Location: index.php');
-			exit();
+			put_flash('Error while sending mail to user.', "/index.php");
 		}
 	}
 ?>
